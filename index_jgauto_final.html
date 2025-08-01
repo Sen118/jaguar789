@@ -2,75 +2,58 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>กำลังหาเซิฟเวอร์...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>กำลังโหลด...</title>
   <style>
     body {
-      margin: 0;
-      background: #1a1a1a;
-      color: #ccc;
-      font-family: sans-serif;
-      height: 100vh;
+      background-color: #000;
+      color: #fff;
       display: flex;
-      align-items: center;
-      justify-content: center;
       flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Arial', sans-serif;
     }
-
-    .spinner {
+    .loader {
       border: 8px solid #444;
-      border-top: 8px solid #00ffcc;
+      border-top: 8px solid #00ff99;
       border-radius: 50%;
       width: 80px;
       height: 80px;
       animation: spin 1s linear infinite;
       margin-bottom: 20px;
     }
-
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
     h1 {
-      color: #ccc;
-      font-size: 20px;
-      text-align: center;
-      padding: 0 20px;
+      font-size: 24px;
+      color: #00ff99;
     }
   </style>
 </head>
 <body>
-  <div class="spinner"></div>
-  <h1>กำลังตรวจสอบลิงก์ s2klaos กรุณารอสักครู่...</h1>
+  <div class="loader"></div>
+  <h1>Loading...</h1>
 
   <script>
-    const urls = [
-      "https://jgauto-novaglobal.store/login",
-      "https://jgauto-qbar.store/login",
-    ];
+    const primaryUrl = "https://jgauto-novaglobal.store/login";
+    const fallbackUrl = "https://jgauto-qbar.store/login";
 
-    let redirected = false;
+    fetch(primaryUrl, { method: 'HEAD', mode: 'no-cors' })
+      .then(() => {
+        window.location.href = primaryUrl;
+      })
+      .catch(() => {
+        window.location.href = fallbackUrl;
+      });
 
-    (async () => {
-      for (const url of urls) {
-        try {
-          await fetch(url, { method: "HEAD", mode: "no-cors" });
-          if (!redirected) {
-            redirected = true;
-            window.location.href = url;
-            break;
-          }
-        } catch (e) {
-          console.warn("เชื่อมต่อไม่ได้:", url);
-        }
-
-        await new Promise(r => setTimeout(r, 1000));
-      }
-
-      if (!redirected) {
-        document.querySelector("h1").innerText = "ไม่พบลิงก์ที่สามารถเข้าได้";
-      }
-    })();
+    setTimeout(() => {
+      window.location.href = fallbackUrl;
+    }, 5000);
   </script>
 </body>
 </html>
